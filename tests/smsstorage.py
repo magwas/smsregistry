@@ -19,6 +19,7 @@ class SmsParseTests(unittest.TestCase):
 
     def test_first_stored_sms_is_ignored_due_to_gammu(self):
         allSms = SmsStorage(self.onesms)
+        self.assertEquals(allSms.getSize(),1)
         self.assertEquals(allSms.getValidCount(), 0)
 
     def test_empty_storage_contains_zero_sms(self):
@@ -28,6 +29,7 @@ class SmsParseTests(unittest.TestCase):
     def test_storage_with_two_contains_one_useable_sms(self):
         allSms = SmsStorage(self.twosms)
         self.assertEquals(allSms.getValidCount(), 1)
+        self.assertEquals(allSms.getValids()[0].location, 1)
 
     def test_bad_sms_does_not_count(self):
         allSms = SmsStorage(self.badformat)

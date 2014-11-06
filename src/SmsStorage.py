@@ -25,8 +25,10 @@ class SmsStorage:
                 continue
             locationMatch = re.match("^Location ([0-9]*)",line)
             if locationMatch:
-                self.newSms()
-                self.location=int(locationMatch.groups()[0])
+                newlocation=int(locationMatch.groups()[0])
+                if newlocation != 0:
+                    self.newSms()
+                self.location=newlocation
                 continue;
             numberMatch = re.match(r'^Remote number',line)
             if numberMatch:
