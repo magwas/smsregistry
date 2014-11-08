@@ -49,7 +49,7 @@ class SmsStorage:
     def getValids(self):
         l = []
         for sms in self.smses:
-                if sms.valid:
+                if sms.valid or sms.unsub:
                     l.append(sms)
         return l                
 
