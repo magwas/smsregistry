@@ -18,10 +18,11 @@ class Mailer:
         self.updateOldTemplate = config.get("email", "updateold")
         self.updateNewSubject = config.get("email", "updatenewsubject")
         self.updateNewTemplate = config.get("email", "updatenew")
+        self.mailaddress = config.get("email", "myaddress")
         self.doSend = self.sendWithProg
     def sendMessage(self, recipient, subject, text):
         msg = MIMEText(text, 'plain', 'utf-8')
-        msg["From"] = "me@example.com"
+        msg["From"] = self.mailaddress
         msg["To"] = recipient
         msg["Subject"] = Header(subject,'utf-8')
         self.doSend(msg)
