@@ -23,6 +23,8 @@ class SmsStorage:
             if self.isBody:
                 self.body = line
                 continue
+            if line.startswith("Error opening device"):
+                raise ValueError(line)
             locationMatch = re.match("^Location ([0-9]*)",line)
             if locationMatch:
                 newlocation=int(locationMatch.groups()[0])

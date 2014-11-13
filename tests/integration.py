@@ -3,10 +3,7 @@
 import unittest
 from Main import Main
 from SmsStorage import SmsStorage
-from FakeMailer import FakeMailer
-
-def fakeRemove(sms):
-    print "removing {0}".format(sms.location)
+from Mailer import Mailer
 
 class maintest(unittest.TestCase):
 
@@ -14,9 +11,8 @@ class maintest(unittest.TestCase):
         with open ("testdata/testdata_manygood", "r") as myfile:
             self.manygood = myfile.readlines()
         allSms = SmsStorage(self.manygood)
-        mailer = FakeMailer()
+        mailer = Mailer()
         prg = Main(mailer)
-        prg.doRemove = fakeRemove
         prg.processLoop(allSms)
         self.assertEquals(prg.db.getEmailFor("+36209303349"),"mag@magwas.rulez.org")
         self.assertEquals(prg.db.getEmailFor("+36209301112"),"m4gw4s@gmai.com")

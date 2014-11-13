@@ -8,7 +8,8 @@ class Phone:
        pipe = subprocess.Popen("gammu getallsms", shell=True, stdout=subprocess.PIPE).stdout
        return pipe.readlines() 
 
-    def removeSms(self, location):
-        if location <= 0:
+    def removeSms(self, sms):
+        if sms.location <= 0:
             return
-        subprocess.call(["gammu", "deletesms", "1", str(location)])
+        args = ["gammu", "deletesms", "1", str(sms.location)]
+        subprocess.call(args)

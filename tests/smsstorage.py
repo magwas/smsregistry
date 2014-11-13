@@ -13,6 +13,9 @@ class SmsParseTests(unittest.TestCase):
             self.twosms = myfile.readlines()
         with open ("testdata/testdata_twosms_badformat", "r") as myfile:
             self.badformat = myfile.readlines()
+        with open ("testdata/nophone", "r") as myfile:
+            self.nophone = myfile.readlines()
+
 
     def test_setUp(self):
         self.assertEquals(len(self.onesms),13)
@@ -42,6 +45,10 @@ class SmsParseTests(unittest.TestCase):
     def test_number_available(self):
         allSms = SmsStorage(self.twosms)
         self.assertEquals(allSms.getValids()[0].number, "+36209303349")
+
+    def test_phone_error(self):
+        with self.assertRaises(ValueError):
+            SmsStorage(self.nophone)
 
 if __name__ == '__main__':
         unittest.main()

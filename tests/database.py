@@ -5,6 +5,8 @@ from Config import config
 from SmsStorage import SmsStorage
 from Database import Database
 from Sms import Sms
+from FakeMailer import FakeMailer
+
 
 class Databasetest(unittest.TestCase):
 
@@ -14,7 +16,8 @@ class Databasetest(unittest.TestCase):
             self.twosms = myfile.readlines()
         with open ("testdata/testdata_manygood", "r") as myfile:
             self.manygood = myfile.readlines()
-        self.db = Database()
+        mailer = FakeMailer()
+        self.db = Database(mailer)
         self.db.__clear()
 
     def test_storage_with_two_contains_one_useable_sms(self):
