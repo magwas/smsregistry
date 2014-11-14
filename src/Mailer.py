@@ -20,19 +20,25 @@ class Mailer:
         self.updateNewTemplate = config.get("email", "updatenew")
         self.mailaddress = config.get("email", "myaddress")
         self.doSend = self.sendWithProg
+
     def sendMessage(self, recipient, subject, text):
         msg = MIMEText(text, 'plain', 'utf-8')
         msg["From"] = self.mailaddress
         msg["To"] = recipient
         msg["Subject"] = Header(subject,'utf-8')
         self.doSend(msg)
+
     def sendWithProg(self,msg):
-        p = Popen(self.senderprog, stdin=PIPE)
-        p.communicate(msg.as_string())
+        p = Popen(self.senderprog, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        stdout, stderr = p.communicate(msg.as_string())
+        if p.returncode != 0:
+            raise ValueError("Error running {0}. stdout={1}, stderr={2}".format(self.senderprog, stdout, stderr ))
+
     def registered(self, sms):
         text = self.registerTemplate.format(sms)
         text += self.footer
         self.sendMessage(sms.email, self.registerSubject, text)
+
     def updated(self, sms, oldemail):
         text = self.updateNewTemplate.format(sms, oldemail)
         text += self.footer
@@ -41,10 +47,12 @@ class Mailer:
         text2 = self.updateOldTemplate.format(sms, oldemail)
         text2 += self.footer
         self.sendMessage(oldemail, self.updateOldSubject, text2)
+
     def deleted(self, sms, oldemail):
         text = self.deleteTemplate.format(sms, oldemail)
         text += self.footer
         self.sendMessage(oldemail, self.deleteSubject, text)
+
     def triedUnsubNonexistent(self, sms):
         syslog("unregistered unsubscribe from %s\n"%(sms.number))
 

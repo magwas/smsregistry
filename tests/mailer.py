@@ -46,5 +46,19 @@ class MailerTest(unittest.TestCase):
             expected = f.read()
         self.assertEquals(expected,sender.sent[0].as_string())
 
+    def test_sendmail_is_missing(self):
+        sms = Sms(5, "a Cimem: m4gw4s@gmail.com\n", "+36209303349")
+        mailer = Mailer()
+        mailer.senderprog = ["/nonexistent/binary"]
+        with self.assertRaises(OSError):
+            mailer.registered(sms)
+
+    def test_sendmail_fails(self):
+        sms = Sms(5, "a Cimem: m4gw4s@gmail.com\n", "+36209303349")
+        mailer = Mailer()
+        mailer.senderprog = ["tests/badscript"]
+        with self.assertRaises(ValueError):
+            mailer.registered(sms)
+
 if __name__ == '__main__':
         unittest.main()
