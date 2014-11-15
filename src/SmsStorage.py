@@ -10,7 +10,7 @@ class SmsStorage:
         self.smses = []
         self.location = -1
         self.isBody = False
-        self.body = "no body"
+        self.body = ""
         self.number = "aaa"
         self.parseStorage()
 
@@ -21,7 +21,7 @@ class SmsStorage:
                 self.isBody = not self.isBody
                 continue;
             if self.isBody:
-                self.body = line
+                self.body = self.body + line
                 continue
             if line.startswith("Error opening device"):
                 raise ValueError(line)
@@ -44,6 +44,7 @@ class SmsStorage:
             self.smses.append(sms)
         except SyntaxError:
             pass
+        self.body=""
 
     def getSize(self):
         return len(self.smses)

@@ -16,6 +16,8 @@ class Databasetest(unittest.TestCase):
             self.twosms = myfile.readlines()
         with open ("testdata/testdata_manygood", "r") as myfile:
             self.manygood = myfile.readlines()
+        with open ("testdata/errordump_utopszkij", "r") as myfile:
+            self.utopszkij = myfile.readlines()
         mailer = FakeMailer()
         self.db = Database(mailer)
         self.db.__clear()
@@ -55,6 +57,12 @@ class Databasetest(unittest.TestCase):
         sms = Sms(5, "unsub\n", "+36209303349")
         self.db.add(sms)
         self.assertEquals(self.db.getEmailFor("+36209303349"),None)
+
+    def test_utopszkij(self):
+        allSms = SmsStorage(self.utopszkij)
+        for sms in allSms.getValids():
+            self.db.add(sms)
+        self.assertEquals(self.db.mailer.log,[('registered', '+36302222201', 'tibor.nemtibor@gmail.com\n2 sms parts in 2 sms sequences')])
 
 if __name__ == '__main__':
         unittest.main()
