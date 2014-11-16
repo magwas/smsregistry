@@ -4,6 +4,7 @@ import unittest
 from Config import config
 from Sms import Sms
 from Mailer import Mailer
+from SmsStorage import SmsStorage
 
 class FakeSender:
     def __init__(self):
@@ -59,6 +60,21 @@ class MailerTest(unittest.TestCase):
         mailer.senderprog = ["tests/badscript"]
         with self.assertRaises(ValueError):
             mailer.registered(sms)
+
+    def test_no_extra_lines_in_mail(self):
+        with open ("testdata/errordump_utopszkij", "r") as myfile:
+            self.utopszkij = myfile.readlines()
+        allSms = SmsStorage(self.utopszkij)
+        sms = allSms.getValids()[0]
+        mailer = Mailer()
+        sender = FakeSender()
+        mailer.doSend = sender.send
+        mailer.registered(sms)
+        with open("testdata/utopszkij_msg") as f:
+            expected = f.read()
+        text = sender.sent[0].as_string()
+        self.assertEquals(expected,sender.sent[0].as_string())
+
 
 if __name__ == '__main__':
         unittest.main()
