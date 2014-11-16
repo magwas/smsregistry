@@ -62,7 +62,7 @@ class Databasetest(unittest.TestCase):
         allSms = SmsStorage(self.utopszkij)
         for sms in allSms.getValids():
             self.db.add(sms)
-        self.assertEquals(self.db.mailer.log,[('registered', '+36302222201', 'tibor.nemtibor@gmail.com\n2 sms parts in 2 sms sequences')])
+        self.assertEquals(self.db.mailer.log,[('registered', '+36302222201', 'tibor.nemtibor@gmail.com')])
 
 if __name__ == '__main__':
         unittest.main()
